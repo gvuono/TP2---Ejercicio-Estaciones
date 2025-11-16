@@ -81,7 +81,7 @@ public class RedSubte {
             construirGrafo();
         }
 
-        BuscadorDeCamino buscador = new BuscadorDeCamino(grafoLineas);
+        BuscadordeCamino buscador = new BuscadordeCamino(grafoLineas);
         return buscador.bfsCaminoMinimo(setOrigen, setDestino);
     }
 
