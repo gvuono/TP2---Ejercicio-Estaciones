@@ -35,7 +35,7 @@ public class TestRunner {
             "1 5\n",
             "1\n1\n"));
 
-        tests.add(new TestCase("C_un_trasbordo",
+        tests.add(new TestCase("C_un_camino",
             "3 8\n" +
             "3 1 2 3\n" +
             "3 3 4 5\n" +
@@ -49,8 +49,6 @@ public class TestRunner {
             "3 1 7 8\n" +
             "4 8 9 10 6\n" +
             "1 10\n",
-            // Aceptamos "1 3" o "2 3" etc. como válidos; aquí esperamos una posible salida.
-            // Para el test runner usaremos una comprobación flexible: si T==2 OK.
             "2\n2 3\n"));
 
         tests.add(new TestCase("E_hub",
@@ -87,8 +85,6 @@ public class TestRunner {
             "1 100000\n",
             "2\n1 2\n"));
 
-        // Nota: El test K (gran generador) lo dejamos como manual o generar dinámicamente más abajo.
-
         // Directorios
         Path base = Paths.get(System.getProperty("user.dir"));
         Path inputDir = base.resolve("test_inputs");
@@ -111,7 +107,6 @@ public class TestRunner {
                 System.err.println("Main lanzó excepción: " + e.getMessage());
             }
 
-            // Leer lo generado (si existe)
             String generated = "";
             if (Files.exists(outFile)) {
                 generated = new String(Files.readAllBytes(outFile)).replaceAll("\\r\\n", "\n");
@@ -121,7 +116,6 @@ public class TestRunner {
 
             String expected = tc.expectedOutput.replaceAll("\\r\\n", "\n");
 
-            // Comparación flexible para test D: aceptamos cualquier T==2 (demostración)
             boolean ok;
             if (tc.name.equals("D_min_trasbordos")) {
                 // parse generated T
@@ -133,7 +127,6 @@ public class TestRunner {
                     ok = false;
                 }
             } else {
-                // Igualdad exacta (ignorando espacios finales)
                 ok = normalize(generated).equals(normalize(expected));
             }
 
@@ -156,7 +149,6 @@ public class TestRunner {
 
     static String normalize(String s) {
         if (s == null) return "";
-        // Trim trailing spaces on each line and ensure trailing newline
         String[] lines = s.replaceAll("\\r\\n", "\n").split("\\n");
         StringBuilder sb = new StringBuilder();
         for (String l : lines) {
@@ -165,3 +157,4 @@ public class TestRunner {
         return sb.toString();
     }
 }
+
