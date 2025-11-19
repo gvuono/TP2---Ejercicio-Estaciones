@@ -1,3 +1,5 @@
+package EjercicioTP2;
+
 import java.io.*;
 import java.util.*;
 
@@ -5,20 +7,18 @@ public class Main {
     public static void main(String[] args) {
         String input = "subte.in";
         String output = "SUBTE.OUT";
-        // Si prefieres pasar argumentos por línea de comando:
         if (args.length >= 2) {
             input = args[0];
             output = args[1];
         }
 
         try {
-            // Leemos todo el archivo manualmente para extraer origen/destino
+            // vamos leyendo para saber el origen-destino
             BufferedReader br = new BufferedReader(new FileReader(input));
             String first = br.readLine();
             if (first == null) throw new IOException("Archivo vacío");
             String[] parts = first.trim().split("\\s+");
             int N = Integer.parseInt(parts[0]);
-            int M = Integer.parseInt(parts[1]);
 
             List<Linea> lineas = new ArrayList<>(N);
             for (int i = 1; i <= N; i++) {
@@ -51,17 +51,11 @@ public class Main {
             // construir grafo
             red.construirGrafo();
 
-            // Calcular camino mínimo (en número de líneas)
             List<Integer> camino = red.calcularCaminoMinimo(origen, destino);
 
-            // Escribir resultado
             EscritorDeArchivo escritor = new EscritorDeArchivo();
-            if (camino.isEmpty()) {
-                // Por seguridad: no debería pasar según enunciado, pero escribimos 0 y nada
-                escritor.escribirResultado(output, 0, Collections.emptyList());
-            } else {
-                escritor.escribirResultado(output, camino.size(), camino);
-            }
+            escritor.escribirResultado(output, camino.size(), camino);
+
 
             System.out.println("Proceso completado. Resultado escrito en " + output);
         } catch (Exception e) {
@@ -70,3 +64,4 @@ public class Main {
         }
     }
 }
+
