@@ -3,25 +3,26 @@ package EjercicioTP2;
 import java.util.*;
 
 public class BuscadordeCamino {
-    private final List<List<Integer>> grafo; // grafo de líneas (1..N). grafo.get(i) -> vecinos de línea i
+    private final List<List<Integer>> grafo; 
 
     public BuscadordeCamino(List<List<Integer>> grafo) {
         this.grafo = grafo;
     }
 
-    /**
-     * BFS multi-source: parte de todas las líneas en lineasOrigen y busca
-     * alcanzar cualquier línea en lineasDestino. Devuelve la secuencia de IDs
-     * de líneas (en orden) o lista vacía si no hay camino.
+    /** El BFS arranca todas las lineas en lineasOrigen e intenta alcanzarlas en lineasDestino
+     * Si encuentra camino lo devuelvo sino devolvera vacio.
      */
     public List<Integer> bfsCaminoMinimo(Set<Integer> lineasOrigen, Set<Integer> lineasDestino) {
         int n = grafo.size() - 1; // grafo indexado 1..N
         boolean[] visited = new boolean[n + 1];
-        int[] parent = new int[n + 1]; // parent[line] = linea anterior en el camino
+        int[] parent = new int[n + 1]; // parent[line] -> apunta a la linea anterior 
         Arrays.fill(parent, -1);
 
         Queue<Integer> q = new ArrayDeque<>();
-        // Si alguna línea está en ambos conjuntos, devolvemos esa línea
+        
+        List<Integer> origenOrdenado = new ArrayList<>(lineasOrigen);
+        Collections.sort(origenOrdenado);
+        // Si se encuentra linea se devuelve
         for (int s : lineasOrigen) {
             if (lineasDestino.contains(s)) {
                 return Collections.singletonList(s);
@@ -44,6 +45,10 @@ public class BuscadordeCamino {
                 encontrado = cur;
                 break;
             }
+            
+            List<Integer> vecinos = new ArrayList<>(grafo.get(cur));
+            Collections.sort(vecinos);
+            
             for (int vecino : grafo.get(cur)) {
                 if (!visited[vecino]) {
                     visited[vecino] = true;
@@ -54,10 +59,9 @@ public class BuscadordeCamino {
         }
 
         if (encontrado == -1) {
-            return Collections.emptyList(); // según el enunciado siempre hay camino, pero por si acaso
+            return Collections.emptyList(); // esto por si no hay camino 
         }
 
-        // Reconstruir camino
         LinkedList<Integer> path = new LinkedList<>();
         int cur = encontrado;
         while (cur != -1) {
