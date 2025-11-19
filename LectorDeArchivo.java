@@ -1,10 +1,11 @@
+package EjercicioTP2;
+
 import java.io.*;
 import java.util.*;
 
 public class LectorDeArchivo {
     /**
-     * Lee el archivo y devuelve una RedSubte completamente poblada.
-     * Se asume el formato del enunciado.
+     * Va leyendo el archivo acorde al formato del enunciado
      */
     public RedSubte leer(String ruta) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
@@ -12,7 +13,6 @@ public class LectorDeArchivo {
             if (first == null) throw new IOException("Archivo vacío");
             String[] parts = first.trim().split("\\s+");
             int N = Integer.parseInt(parts[0]);
-            int M = Integer.parseInt(parts[1]); // no se usa directamente aquí
 
             List<Linea> lineas = new ArrayList<>(N);
 
@@ -38,11 +38,9 @@ public class LectorDeArchivo {
                 ultima = br.readLine();
             }
             if (ultima == null) throw new IOException("Formato inválido: faltan origen/destino");
-            // NOTA: no procesamos origen/destino aquí. Main lo leerá aparte.
-            // Pero para construir la RedSubte solo necesitamos las líneas.
+            // a red subte solo le pasamos las lineas y el grafo se generara en dicha funcion
             RedSubte red = new RedSubte();
             red.agregarLinea(lineas);
-            // No construimos el grafo aquí; lo hará RedSubte cuando sea necesario.
             return red;
         }
     }
